@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react';
 
 import BrowserStorageProvider from '../context/BrowserStorage';
+import GeolocationProvider from '../context/Geolocation';
+import WeatherProvider from '../context/Weather';
 import StoreLoader from './StoreLoader';
 
 interface ChristCenteredProps {
@@ -13,7 +15,11 @@ interface ChristCenteredProps {
 function ChristCentered({ children }: ChristCenteredProps) {
   return (
     <BrowserStorageProvider>
-      <StoreLoader>{children}</StoreLoader>
+      <StoreLoader>
+        <GeolocationProvider>
+          <WeatherProvider>{children}</WeatherProvider>
+        </GeolocationProvider>
+      </StoreLoader>
     </BrowserStorageProvider>
   );
 }

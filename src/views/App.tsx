@@ -7,9 +7,6 @@ import MenuWrapper from '../components/MenuWrapper';
 import Now from '../components/Now';
 import Verse from '../components/Verse';
 import Weather from '../components/Weather';
-import GeolocationProvider from '../context/Geolocation';
-import WeatherProvider from '../context/Weather';
-import WindowSizeProvider from '../context/Window';
 import './App.scss';
 
 function App() {
@@ -17,19 +14,13 @@ function App() {
     <Page className="christ-centered">
       <ChristCentered>
         <Background>
-          <GeolocationProvider>
-            <WeatherProvider>
-              <MenuWrapper>
-                <div className="main-content-container">
-                  <Weather />
-                  <Now />
-                  <WindowSizeProvider>
-                    <Verse />
-                  </WindowSizeProvider>
-                </div>
-              </MenuWrapper>
-            </WeatherProvider>
-          </GeolocationProvider>
+          <MenuWrapper>
+            <div className="main-content-container">
+              <Weather />
+              <Now />
+              <Verse />
+            </div>
+          </MenuWrapper>
         </Background>
       </ChristCentered>
     </Page>
