@@ -1,0 +1,19 @@
+{
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "editor.rulers": [120],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "typescript.format.enable": false,
+  "javascript.format.enable": false,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "scss.format.enable": true,
+  "[scss]": {
+    "editor.formatOnSave": true
+  }
+}
