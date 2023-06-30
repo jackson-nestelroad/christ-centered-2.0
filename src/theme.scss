@@ -1,0 +1,166 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+$theme: (
+  primary: #ff912c,
+  secondary: #b6b6b6,
+  disabled-gray: rgb(222, 222, 222),
+  success: #12bc12,
+  loading: #00a8d8,
+  danger: #ff6868,
+);
+
+@function theme-color($key) {
+  @return map-get($theme, $key);
+}
+
+$sizes: (xs, sm, md, lg, xl);
+
+// Minimum width for the given screen size.
+$breakpoints-min: (
+  xs: 0px,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+// Maximum width for the given screen size.
+$breakpoints-max: (
+  xs: 0px,
+  sm: 575.98px,
+  md: 767.98px,
+  lg: 991.98px,
+  xl: 1199.98px,
+);
+
+// Mixin to apply styles to the given viewport and larger.
+@mixin for-viewport-up($size) {
+  // Small devices (landscape phones).
+  @if ($size == sm) {
+    @media all and (min-width: map-get($breakpoints-min, sm)) {
+      @content;
+    }
+  }
+  // Medium devices (tablets).
+  @else if ($size == md) {
+    @media all and (min-width: map-get($breakpoints-min, md)) {
+      @content;
+    }
+  }
+  // Large devices (desktops).
+  @else if ($size == lg) {
+    @media all and (min-width: map-get($breakpoints-min, lg)) {
+      @content;
+    }
+  }
+  // Extra large devices (large desktops).
+  @else if ($size == xl) {
+    @media all and (min-width: map-get($breakpoints-min, xl)) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Mixin to apply styles to the given viewport and smaller.
+@mixin for-viewport-down($size) {
+  // Extra small devices (portrait phones).
+  @if ($size == xs) {
+    @media all and (max-width: map-get($breakpoints-max, sm)) {
+      @content;
+    }
+  }
+  // Small devices (landscape phones).
+  @else if ($size == sm) {
+    @media all and (max-width: map-get($breakpoints-max, md)) {
+      @content;
+    }
+  }
+  // Medium devices (tablets).
+  @else if ($size == md) {
+    @media all and (max-width: map-get($breakpoints-max, lg)) {
+      @content;
+    }
+  }
+  // Large devices (desktops).
+  @else if ($size == lg) {
+    @media all and (max-width: map-get($breakpoints-max, xl)) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Mixin to apply styles only to the given viewport.
+@mixin for-viewport-only($size) {
+  // Extra small devices (portrait phones).
+  @if ($size == xs) {
+    @media all and (min-width: map-get($breakpoints-min, xs)) and (max-width: map-get($breakpoints-max, sm)) {
+      @content;
+    }
+  }
+  // Small devices (landscape phones).
+  @if ($size == sm) {
+    @media all and (min-width: map-get($breakpoints-min, sm)) and (max-width: map-get($breakpoints-max, md)) {
+      @content;
+    }
+  }
+  // Medium devices (tablets).
+  @else if ($size == md) {
+    @media all and (min-width: map-get($breakpoints-min, md)) and (max-width: map-get($breakpoints-max, lg)) {
+      @content;
+    }
+  }
+  // Large devices (desktops).
+  @else if ($size == lg) {
+    @media all and (min-width: map-get($breakpoint-mins, lg)) and (max-width: map-get($breakpoints-max, xl)) {
+      @content;
+    }
+  }
+  // Extra large devices (large desktops).
+  @else if ($size == xl) {
+    @media all and (min-width: map-get($breakpoints-min, xl)) {
+      @content;
+    }
+  }
+}
+
+// Get the index of the next screen size in the $value-map map.
+@function get-next-size-index($value-map, $start) {
+  @if $start > length($sizes) {
+    @return $start;
+  }
+
+  $i: $start + 1;
+  @while $i <= length($sizes) and map.get($value-map, list.nth($sizes, $i)) == null {
+    $i: $i + 1;
+  }
+
+  @if $i > length($sizes) {
+    @return $i;
+  }
+
+  @return $i;
+}
+
+// Set a property dynamically based on the screen size.
+@mixin set-property-for-screen-size($property, $value-map) {
+  @if meta.type-of($value-map) != map {
+    @error "Input to set-property-for-screen-size is not a map: got #{$value-map}, want map";
+  }
+
+  $i: 0;
+  @while $i <= length($sizes) {
+    $i: get-next-size-index($value-map, $i);
+    @if $i <= length($sizes) {
+      $size: list.nth($sizes, $i);
+      @include for-viewport-up($size) {
+        #{$property}: map.get($value-map, $size);
+      }
+    }
+  }
+}

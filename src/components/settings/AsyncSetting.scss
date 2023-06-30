@@ -1,0 +1,38 @@
+@use "../../theme.scss";
+
+.async-setting {
+  &.loading {
+    input {
+      $color: theme.theme-color(loading);
+      @keyframes loading-border {
+        0% {
+          border-color: $color;
+        }
+        50% {
+          border-color: lighten($color, 30%);
+        }
+        100% {
+          border-color: $color;
+        }
+      }
+      animation: loading-border 2s infinite;
+    }
+  }
+
+  &.success {
+    input {
+      border-color: theme.theme-color(success) !important;
+    }
+  }
+
+  &.failure {
+    input {
+      border-color: theme.theme-color(danger) !important;
+    }
+  }
+
+  .help {
+    margin: 0.25rem;
+    font-size: 0.625rem;
+  }
+}

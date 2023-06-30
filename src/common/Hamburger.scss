@@ -1,0 +1,65 @@
+$line-height: 0.125rem;
+$line-margin: 0.25rem;
+$hamburger-height: calc($line-height * 3 + $line-margin * 2);
+
+.hamburger-container {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  height: $hamburger-height;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+
+  .hamburger {
+    width: 100%;
+    cursor: pointer;
+
+    &.light {
+      .line {
+        background-color: white;
+      }
+    }
+
+    &.dark {
+      .line {
+        background-color: black;
+      }
+    }
+
+    .line {
+      width: 100%;
+      height: $line-height;
+      margin: $line-margin auto;
+      transition: 0.25s ease-in-out;
+    }
+
+    &.closed {
+      &:hover {
+        .line {
+          margin: calc($line-margin * 2) auto;
+        }
+      }
+    }
+
+    &.open {
+      .line {
+        &:nth-child(1) {
+          transform: translateY(calc($line-margin + $line-height)) rotate(45deg);
+        }
+        &:nth-child(2) {
+          transform: rotate(45deg);
+        }
+        &:nth-child(3) {
+          transform: translateY(calc(-1 * ($line-margin + $line-height))) rotate(-45deg);
+        }
+      }
+
+      &:hover {
+        .line {
+          width: 90%;
+        }
+      }
+    }
+  }
+}

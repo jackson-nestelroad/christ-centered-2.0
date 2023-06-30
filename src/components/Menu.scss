@@ -1,0 +1,40 @@
+@use "../theme.scss";
+
+.menu {
+  padding: 1rem 1rem;
+  color: black;
+  text-align: center;
+  font-size: 1rem;
+
+  p {
+    margin: 0.5rem 0;
+  }
+
+  .logo {
+    height: 3rem;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .link {
+    color: #00a8d8;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  hr {
+    margin: 1rem auto;
+    border: none;
+    background-color: theme.theme-color(secondary);
+    height: 0.125rem;
+  }
+
+  .settings {
+    font-size: 0.75rem;
+
+    > * {
+      margin: 1rem 0;
+    }
+  }
+}

@@ -1,0 +1,78 @@
+@use "../theme.scss";
+
+$size: 1.5rem;
+$padding: calc($size / 3);
+$checkmark-width: calc($padding / 2);
+$adjustment: calc($checkmark-width / 2);
+
+$color: theme.theme-color(primary);
+
+.checkbox {
+  display: inline-block;
+  position: relative;
+  width: $size;
+  height: $size;
+  border: 0.125rem solid;
+  border-color: theme.theme-color(secondary);
+  border-radius: 0.3rem;
+  background-color: transparent;
+  transition: 0.3s;
+  transition-property: background-color, transform, border-color;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
+
+  &:not(.disabled) {
+    &:hover {
+      border-color: $color;
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  .checkmark-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+
+    .checkmark {
+      opacity: 0;
+      width: calc($size - 2 * $padding);
+      height: calc($size - 1 * $padding);
+      border: solid white;
+      border-width: 0 $checkmark-width $checkmark-width 0;
+      transform: rotate(45deg);
+      margin-bottom: $adjustment;
+      transition: opacity 0.3s;
+    }
+  }
+
+  &.checked {
+    background-color: $color;
+    border-color: $color;
+
+    .checkmark {
+      opacity: 1;
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    border-color: theme.theme-color(disabled-gray);
+
+    &.checked {
+      background-color: theme.theme-color(disabled-gray);
+
+      .checkmark {
+        opacity: 0.5;
+      }
+    }
+  }
+}

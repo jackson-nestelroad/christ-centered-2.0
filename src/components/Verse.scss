@@ -1,0 +1,99 @@
+@use "../theme.scss";
+
+.verse-container {
+  width: 80%;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+
+  flex: 0 1 auto;
+
+  @include theme.set-property-for-screen-size(
+    margin-top,
+    (
+      xs: 4rem,
+      md: 5rem,
+      lg: 6rem,
+    )
+  );
+
+  .verse {
+    margin: 0 auto;
+    user-select: none;
+    text-align: center;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 0.25rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 1);
+      border-radius: 0.25rem;
+    }
+
+    .text {
+      margin: 0;
+      white-space: pre-line;
+
+      @include theme.set-property-for-screen-size(
+        font-size,
+        (
+          xs: 1rem,
+          md: 1.25rem,
+          lg: 1.5rem,
+        )
+      );
+
+      @include theme.set-property-for-screen-size(
+        text-shadow,
+        (
+          xs: 0px 1px 1px rgba(0, 0, 0, 0.5),
+          md: 0px 2px 1px rgba(0, 0, 0, 0.5),
+          lg: 0px 3px 1px rgba(0, 0, 0, 0.5),
+        )
+      );
+    }
+  }
+}
+
+.reference-container {
+  @include theme.set-property-for-screen-size(
+    margin,
+    (
+      xs: 2rem auto 2rem,
+      md: 2.5rem auto 3rem,
+      lg: 3rem auto 4rem,
+    )
+  );
+
+  .reference {
+    margin: 0;
+
+    a {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 700;
+      mix-blend-mode: screen;
+      color: black;
+      background: white;
+      opacity: 0.75;
+      padding: 0.25rem 1rem;
+      border-radius: 4rem;
+
+      @include theme.set-property-for-screen-size(
+        font-size,
+        (
+          xs: 0.625rem,
+          md: 0.75rem,
+          lg: 1rem,
+        )
+      );
+    }
+  }
+}

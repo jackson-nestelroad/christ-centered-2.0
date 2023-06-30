@@ -1,0 +1,25 @@
+@use "../theme.scss";
+
+.text-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: inherit;
+  background-color: white;
+  border: 0.125rem solid theme.theme-color(secondary);
+  border-radius: 0.3rem;
+  padding: 0.25rem;
+  outline: none;
+  transition: 0.2s;
+
+  &:not([disabled]) {
+    &:focus,
+    &:active {
+      border-color: theme.theme-color(primary);
+    }
+  }
+
+  &[disabled] {
+    background-color: theme.theme-color(disabled-gray);
+  }
+}

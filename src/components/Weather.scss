@@ -1,0 +1,28 @@
+.weather {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  user-select: none;
+  text-align: center;
+  opacity: 0.8;
+
+  .icon {
+    font-size: 3rem;
+    text-shadow: 0px 3px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .temperature {
+    font-size: 1.5rem;
+    text-shadow: 0px 1.5px 1px rgba(0, 0, 0, 0.5);
+
+    .unit {
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+  }
+
+  .location {
+    font-size: 0.75rem;
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+  }
+}

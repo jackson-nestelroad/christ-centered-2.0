@@ -1,0 +1,59 @@
+@use "../theme.scss";
+
+$width: 3rem;
+$height: 1.5rem;
+
+$circle-diameter: calc($height - 0.5rem);
+$circle-margin: 0.25rem;
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: $width;
+  height: $height;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    .slider {
+      background-color: theme.theme-color(disabled-gray);
+
+      &::before {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &.on .slider::before {
+    transform: translateX(calc($width - $circle-diameter - $circle-margin * 2));
+  }
+
+  .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: theme.theme-color(primary);
+    border-radius: calc($width / 2);
+    box-shadow: inset 0 6px 0 rgba(0, 0, 0, 0.5);
+    transition: 0.5s;
+
+    &::before {
+      content: "";
+      position: absolute;
+      height: $circle-diameter;
+      width: $circle-diameter;
+      top: $circle-margin;
+      left: $circle-margin;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    }
+  }
+}

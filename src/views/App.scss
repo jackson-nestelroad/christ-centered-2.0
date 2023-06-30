@@ -1,0 +1,19 @@
+.main-content-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+
+  .fade-in {
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    animation: fade-in 0.5s;
+  }
+}

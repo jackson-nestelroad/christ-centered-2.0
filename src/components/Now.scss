@@ -1,0 +1,57 @@
+@use "../theme.scss";
+
+.now {
+  white-space: nowrap;
+  user-select: none;
+  margin: 3rem 0 0 0;
+  text-align: center;
+  line-height: 1;
+  font-weight: 300;
+
+  flex: 0 1 auto;
+
+  .time {
+    margin: 0;
+
+    @include theme.set-property-for-screen-size(
+      font-size,
+      (
+        xs: 5rem,
+        md: 7.5rem,
+        lg: 9rem,
+      )
+    );
+
+    @include theme.set-property-for-screen-size(
+      text-shadow,
+      (
+        xs: 0px 2px 1px rgba(0, 0, 0, 0.5),
+        md: 0px 3px 1px rgba(0, 0, 0, 0.5),
+        lg: 0px 4px 1px rgba(0, 0, 0, 0.5),
+      )
+    );
+  }
+
+  .date {
+    margin: 0;
+    opacity: 0.8;
+
+    @include theme.set-property-for-screen-size(
+      font-size,
+      (
+        xs: 1rem,
+        md: 1.5rem,
+        lg: 2rem,
+      )
+    );
+
+    @include theme.set-property-for-screen-size(
+      text-shadow,
+      (
+        xs: 0px 1px 1px rgba(0, 0, 0, 0.5),
+        md: 0px 1.5px 1px rgba(0, 0, 0, 0.5),
+        lg: 0px 2px 1px rgba(0, 0, 0, 0.5),
+      )
+    );
+  }
+}

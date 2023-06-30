@@ -1,0 +1,14 @@
+.checkbox-setting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > * {
+    padding: 0 0.25rem;
+  }
+
+  .option {
+    text-align: left;
+    flex: 1;
+  }
+}
