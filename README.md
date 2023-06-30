@@ -1,46 +1,74 @@
-# Getting Started with Create React App
+# Christ-Centered 2.0
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Christ-Centered** is a Google Chrome extension to override your new tab page with a Bible Verse of the Day.
 
-## Available Scripts
+## History
 
-In the project directory, you can run:
+Christ-Centered was my first programming project ever in university. It was originally written in React, and [its codebase](https://github.com/jackson-nestelroad/christ-centered) reflects my early days as a programmer.
 
-### `npm start`
+Over the years, I became interested in adding more features to the simple extension, such as supporting different Bible versions and languages and porting the extension to Firefox. These features were difficult to add to the original codebase.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Thus, five years after the first version, I have decided to rewrite the extension completely, making it much more adpatable to new features and use cases!
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## About
 
-### `npm test`
+**Christ-Centered** is built with React, TypeScript, and SCSS.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+- Display the Bible Verse of the Day (from BibleGateway) in your new tab page.
+- Display current weather information for your area or for a custom location.
+- Display a custom Bible verse or entire passage via passage lookup.
+- Dynamic width and height resizing.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Engineering Documentation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Bible verses are fetched from BibleGateway using [daily-bread](https://github.com/jackson-nestelroad/daily-bread), a generic TypeScript module built for Bible verse and passage lookup.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Directory Layout
 
-### `npm run eject`
+- `build/` - Output directory.
+- `dev/` - Development scripts.
+- `eslint/` - ESLint configuration.
+- `images/` - Images used for promotion.
+- `public/` - Static assets served with the app.
+- `src/` - Source directory.
+  - `common/` - Generic, reusable React components.
+  - `components/` - Application-specific React components.
+  - `context/` - React context providers.
+  - `data/` - Data built within the application itself.
+  - `hooks/` - Utilities for working with React hooks.
+  - `lib/` - Library functionality that works independent of the React application.
+  - `service/` - TypeScript modules that provide a specific service and can be shared across components.
+  - `store/` - Redux store configuration.
+  - `types/` - TypeScript types.
+  - `util/` - General utility funtions.
+  - `views/` - Application views.
+  - `index.tsx` - Application entrypoint.
+  - `theme.scss` - Variables and mixins for consistent styling.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Persistent Data Storage
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+A large part of this application deals with application data storage. Since this application runs exclusively in a browser, persistent data is not stored in an external database but in the browser itself.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+All application data must be checkpointed to the browser storage system for **consistency** (settings should not change from one load to the next) and for **caching** (the verse of the day changes once per day, so no need to fetch it every time the application loads).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+This application uses **Redux** to manage application-wide state. However, Redux state is lost on every reload of the application. Thus, additional mechanisms were built to correctly sync the Redux store with the browser's local storage (which is persistent across application reloads).
 
-## Learn More
+- `<BrowserStorageProvider>` provides a `BrowserStorageServiceInterface`, which gives a generic interface for saving state to the browser's local storage. In Chrome extensions, this uses the `chrome.sync` API. In a webpage, this uses `localStorage`.
+- `<StoreLoader>` automatically loads the store in browser storage to the Redux store. In this process, default values are filled in to missing values, and values explicitly marked for deletion by the application are removed. This conforms whatever state was stored in browser storage to the form expected by the application.
+- Finally, the `saveToBrowserStorage` Redux middleware syncs all Redux store changes to the browser storage. Thus, the application state updates will persist when the application reloads.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+All of this data synchronization happens behind the scenes of the application logic. Thus, individual components only need to work with the Redux store (as any other React application would) and not worry about saving the data to the browser's local storage.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Separation of Concerns
+
+The application employs strict separation of concerns using multiple concepts:
+
+- **Components** - React components that render HTML using application state.
+- **Service** - TypeScript modules that provide some feature.
+- **Context** - React components that share state across the entire application. In this application, contexts are used to provide a singleton instance of a Service.
+
+Take fetching the weather, for example. `<Weather>` is a React component for rendering weather data HTML. It is creates inside of a `WeatherProvider`, which is a context that provides an instance of the `WeatherServiceInterface`. Thus, the rendering logic of `<Weather>` only needs to call the `useWeather()` hook to get an instance of the `WeatherServiceInterface` and call a method on that.
+
+These concepts allow rendering logic and application logic to be completely separated from one another in the application.
