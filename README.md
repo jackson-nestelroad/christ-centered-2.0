@@ -2,6 +2,18 @@
 
 **Christ-Centered** is a Google Chrome extension to override your new tab page with a Bible Verse of the Day.
 
+## Features
+
+- Display the Bible Verse of the Day (from BibleGateway) in your new tab page.
+- Display current weather information for your area or for a custom location.
+- Display a custom Bible verse or entire passage via passage lookup.
+- Dynamic width and height resizing.
+
+### Future
+
+- Multiple translations support.
+- Multiple languages support.
+
 ## History
 
 Christ-Centered was my first programming project ever in university. It was originally written in React, and [its codebase](https://github.com/jackson-nestelroad/christ-centered) reflects my early days as a programmer.
@@ -14,16 +26,11 @@ Thus, five years after the first version, I have decided to rewrite the extensio
 
 **Christ-Centered** is built with React, TypeScript, and SCSS.
 
-## Features
-
-- Display the Bible Verse of the Day (from BibleGateway) in your new tab page.
-- Display current weather information for your area or for a custom location.
-- Display a custom Bible verse or entire passage via passage lookup.
-- Dynamic width and height resizing.
-
 ## Engineering Documentation
 
 Bible verses are fetched from BibleGateway using [daily-bread](https://github.com/jackson-nestelroad/daily-bread), a generic TypeScript module built for Bible verse and passage lookup.
+
+Weather data is provided from [Open Weather Map](https://openweathermap.org/).
 
 ### Directory Layout
 
@@ -57,7 +64,7 @@ This application uses **Redux** to manage application-wide state. However, Redux
 
 - `<BrowserStorageProvider>` provides a `BrowserStorageServiceInterface`, which gives a generic interface for saving state to the browser's local storage. In Chrome extensions, this uses the `chrome.sync` API. In a webpage, this uses `localStorage`.
 - `<StoreLoader>` automatically loads the store in browser storage to the Redux store. In this process, default values are filled in to missing values, and values explicitly marked for deletion by the application are removed. This conforms whatever state was stored in browser storage to the form expected by the application.
-- Finally, the `saveToBrowserStorage` Redux middleware syncs all Redux store changes to the browser storage. Thus, the application state updates will persist when the application reloads.
+- Finally, the `saveToBrowserStorage` Redux middleware syncs all Redux store changes to the browser storage. Thus, application state updates will persist when the application reloads.
 
 All of this data synchronization happens behind the scenes of the application logic. Thus, individual components only need to work with the Redux store (as any other React application would) and not worry about saving the data to the browser's local storage.
 
@@ -66,9 +73,9 @@ All of this data synchronization happens behind the scenes of the application lo
 The application employs strict separation of concerns using multiple concepts:
 
 - **Components** - React components that render HTML using application state.
-- **Service** - TypeScript modules that provide some feature.
-- **Context** - React components that share state across the entire application. In this application, contexts are used to provide a singleton instance of a Service.
+- **Services** - TypeScript modules that provide some feature.
+- **Contexts** - React components that share state across the entire application. In this application, contexts are primarily used to provide a singleton instance of a Service.
 
-Take fetching the weather, for example. `<Weather>` is a React component for rendering weather data HTML. It is creates inside of a `WeatherProvider`, which is a context that provides an instance of the `WeatherServiceInterface`. Thus, the rendering logic of `<Weather>` only needs to call the `useWeather()` hook to get an instance of the `WeatherServiceInterface` and call a method on that.
+Take fetching the weather, for example. `<Weather>` is a React component for rendering weather data HTML. It is created inside of a `WeatherProvider`, which is a context that provides an instance of the `WeatherServiceInterface`. Thus, the rendering logic of `<Weather>` only needs to call the `useWeather()` hook to get an instance of the `WeatherServiceInterface` and call a method on that.
 
 These concepts allow rendering logic and application logic to be completely separated from one another in the application.
