@@ -36,7 +36,7 @@
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "pack": "zip build.zip build"
+    "pack": "zip -r - build > build.zip"
   },
   "browserslist": {
     "production": [
