@@ -1,0 +1,21 @@
+Size: 1400x900
+
+Verse: Matt 6:33
+Background: 80
+Location: San Jose
+
+Verse: Romans 8:28
+Background: 62
+Location: Dallas
+
+Verse: Psalm 2
+Background: 72
+Location: London
+
+Verse: Matt 6:9-13
+Background: 75
+Location: Oklahoma City
+
+Verse: Jer 29:11
+Background: 6
+Location: New York
