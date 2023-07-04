@@ -1,0 +1,30 @@
+.missing-origins {
+  margin: 4rem auto;
+
+  button {
+    display: block;
+
+    font-weight: 700;
+    mix-blend-mode: screen;
+    color: black;
+    background: white;
+    padding: 0.25rem 1rem;
+    border: none;
+    border-radius: 4rem;
+    cursor: pointer;
+
+    @keyframes grow {
+      0% {
+        transform: scale(1, 1);
+      }
+      50% {
+        transform: scale(1.2, 1.2);
+      }
+      100% {
+        transform: scale(1, 1);
+      }
+    }
+
+    animation: grow 2s infinite;
+  }
+}

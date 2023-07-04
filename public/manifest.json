@@ -26,5 +26,11 @@
     "https://*.biblegateway.com/*",
     "https://fonts.googleapis.com/*",
     "https://api.openweathermap.org/*"
-  ]
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "firefox@christcentered.com"
+    }
+  }
 }

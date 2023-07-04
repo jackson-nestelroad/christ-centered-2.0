@@ -47,6 +47,37 @@ export class ChromeSyncStorageService extends ChromeStorageService {
   }
 }
 
+class FirefoxStorageService implements BrowserStorageServiceInterface {
+  public constructor(protected storageArea: browser.storage.StorageArea) {}
+
+  public async getRootState(): Promise<Partial<RootState>> {
+    const storage = await this.storageArea.get(StoreKeys);
+    const state: Partial<RootState> = {};
+    for (const key of StoreKeys) {
+      const storedState: string | undefined = storage[key];
+      if (storedState) {
+        state[key] = JSON.parse(storedState);
+      }
+    }
+    return state;
+  }
+
+  public async saveState<K extends StoreKey>(key: K, state: RootState[K]): Promise<void> {
+    await this.storageArea.set({ [key]: JSON.stringify(state) });
+  }
+
+  public async has(key: StoreKey): Promise<boolean> {
+    const storage = await this.storageArea.get(key);
+    return !!storage;
+  }
+}
+
+export class FirefoxSyncStorageService extends FirefoxStorageService {
+  public constructor() {
+    super(browser.storage.sync);
+  }
+}
+
 class LocalStorageService implements BrowserStorageServiceInterface {
   public async getRootState(): Promise<Partial<RootState>> {
     const state: Partial<RootState> = {};
@@ -69,10 +100,16 @@ class LocalStorageService implements BrowserStorageServiceInterface {
 }
 
 export function CreateBrowserStorageService(): BrowserStorageServiceInterface {
+  if (typeof browser !== 'undefined' && browser?.storage?.sync) {
+    console.log('Running in Firefox');
+    return new FirefoxSyncStorageService();
+  }
   if (chrome?.storage?.sync) {
+    console.log('Running in Chrome');
     return new ChromeSyncStorageService();
   }
   if (localStorage) {
+    console.log('Running in a web page');
     return new LocalStorageService();
   }
   throw new Error('No browser storage is available');
