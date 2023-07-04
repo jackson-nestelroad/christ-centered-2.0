@@ -22,9 +22,13 @@ export const settingsSlice = createSlice<SettingsState, SliceCaseReducers<Settin
     setTwentyFourHour: (state, action: PayloadAction<boolean>) => {
       state.twentyFourHour = action.payload;
     },
+    setBackground: (state, action: PayloadAction<number | undefined>) => {
+      const value = action.payload ? action.payload - 1 : action.payload;
+      state.background = value;
+    },
   },
 });
 
-export const { setVersion, setTwentyFourHour } = settingsSlice.actions;
+export const { setVersion, setTwentyFourHour, setBackground } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

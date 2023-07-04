@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
+import { Environment } from '../service/environment';
 import { useAppSelector } from '../store/hooks';
 import './Now.scss';
 
-interface TimeState {
+interface NowState {
   now: Date;
+  override?: Date;
 }
 
 function addLeadingZero(n: number): string {
@@ -12,25 +14,33 @@ function addLeadingZero(n: number): string {
 }
 
 function Now() {
-  const [state, setState] = useState<TimeState>({
+  const [state, setState] = useState<NowState>({
     now: new Date(),
   });
+
+  if (Environment.Environment() !== 'production') {
+    (globalThis as any).setNow = (now: Date) => {
+      setState({ ...state, override: now });
+    };
+  }
 
   const { twentyFourHour } = useAppSelector(state => state.settings);
 
   setTimeout(() => {
-    setState({ now: new Date() });
+    setState(state => ({ ...state, now: new Date() }));
   }, 1000);
 
-  let hours = state.now.getHours();
+  const now = state.override ?? state.now;
+
+  let hours = now.getHours();
   if (!twentyFourHour) {
     hours %= 12;
     if (hours === 0) {
       hours = 12;
     }
   }
-  const minutes = state.now.getMinutes();
-  const seconds = state.now.getSeconds();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
 
   return (
     <div className="now">

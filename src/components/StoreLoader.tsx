@@ -5,6 +5,7 @@ import { useBrowserStorage } from '../context/BrowserStorage';
 import { BrowserStorageServiceInterface } from '../service/browser-storage';
 import { Environment } from '../service/environment';
 import configureStore, { CreatedStore, RootState, StoreKey, StoreKeys } from '../store/root';
+import { setBackground } from '../store/slices/settings';
 import { setVerse } from '../store/slices/verse';
 import { WeatherState } from '../store/slices/weather';
 
@@ -46,6 +47,9 @@ function StoreLoader({ children }: StoreLoaderProps) {
       };
       (globalThis as any).resetWeather = () => {
         storage.saveState('weather', {} as WeatherState);
+      };
+      (globalThis as any).setBackground = (background?: number) => {
+        store.dispatch(setBackground(background));
       };
     }
 
