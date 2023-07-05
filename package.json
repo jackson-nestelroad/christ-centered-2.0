@@ -37,7 +37,8 @@
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "pack": "zip -r - build > build.zip"
+    "pack": "cd build && zip -r - . > ../build.zip",
+    "pack-source-code": "zip -r - public src .env package-lock.json package.json README.md tsconfig.json > source-code.zip"
   },
   "browserslist": {
     "production": [

@@ -14,6 +14,26 @@
 - Multiple translations support.
 - Multiple languages support.
 
+## Installation
+
+Install dependencies:
+
+```
+npm install
+```
+
+Start locally in a web page:
+
+```
+npm start
+```
+
+Build for production:
+
+```
+npm run build
+```
+
 ## History
 
 Christ-Centered was my first programming project ever in university. It was originally written in React, and [its codebase](https://github.com/jackson-nestelroad/christ-centered) reflects my early days as a programmer.
