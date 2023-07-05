@@ -6,49 +6,10 @@ export interface BrowserStorageServiceInterface {
   has(key: StoreKey): Promise<boolean>;
 }
 
-class ChromeStorageService implements BrowserStorageServiceInterface {
-  public constructor(protected storageArea: chrome.storage.StorageArea) {}
+type StorageArea = typeof browser.storage.local | typeof chrome.storage.local;
 
-  public async getRootState(): Promise<Partial<RootState>> {
-    return new Promise((resolve, reject) => {
-      this.storageArea.get(StoreKeys, storage => {
-        try {
-          const state: Partial<RootState> = {};
-          for (const key of StoreKeys) {
-            const storedState: string | undefined = storage[key];
-            if (storedState) {
-              state[key] = JSON.parse(storedState);
-            }
-          }
-          resolve(state);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    });
-  }
-
-  public async saveState<K extends StoreKey>(key: K, state: RootState[K]): Promise<void> {
-    await this.storageArea.set({ [key]: JSON.stringify(state) });
-  }
-
-  public async has(key: StoreKey): Promise<boolean> {
-    return new Promise(resolve => {
-      this.storageArea.get(key, storage => {
-        resolve(!!storage);
-      });
-    });
-  }
-}
-
-export class ChromeSyncStorageService extends ChromeStorageService {
-  public constructor() {
-    super(chrome.storage.sync);
-  }
-}
-
-class FirefoxStorageService implements BrowserStorageServiceInterface {
-  public constructor(protected storageArea: browser.storage.StorageArea) {}
+class BrowserStorageAreaStorageService implements BrowserStorageServiceInterface {
+  public constructor(protected storageArea: StorageArea) {}
 
   public async getRootState(): Promise<Partial<RootState>> {
     const storage = await this.storageArea.get(StoreKeys);
@@ -72,9 +33,15 @@ class FirefoxStorageService implements BrowserStorageServiceInterface {
   }
 }
 
-export class FirefoxSyncStorageService extends FirefoxStorageService {
+export class FirefoxSyncStorageService extends BrowserStorageAreaStorageService {
   public constructor() {
     super(browser.storage.sync);
+  }
+}
+
+export class ChromeSyncStorageService extends BrowserStorageAreaStorageService {
+  public constructor() {
+    super(chrome.storage.sync);
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useId, useState } from 'react';
 
 import { ReactHooks } from '../hooks';
+import { BrowserPermissionsServiceInterface, CreateBrowserPermissionsService } from '../service/browser-permissions';
 import { Status } from '../types/status';
 import { AppError, CreateAppError } from '../util/error';
 import './OriginsPermissions.scss';
@@ -18,30 +19,23 @@ interface OriginsPermissionsProps {
   children?: ReactNode;
 }
 
-type OriginsPermissionsHooks = ReactHooks<OriginsPermissionsState, 'setState'>;
-
-function usePermissionService() {
-  if (typeof browser !== 'undefined' && browser?.permissions) {
-    return browser.permissions;
-  }
-  if (chrome?.permissions) {
-    return chrome.permissions;
-  }
-  return undefined;
-}
+type OriginsPermissionsHooks = ReactHooks<OriginsPermissionsState, 'setState'> & {
+  permissionsService: BrowserPermissionsServiceInterface;
+};
 
 function missingOrigins(has: string[], needs: string[]): string[] {
   return needs.filter(origin => !has.includes(origin));
 }
 
-async function getMissingOrigins(needs: string[]): Promise<string[]> {
-  const permissionsService = usePermissionService()!;
+async function getMissingOrigins(
+  permissionsService: BrowserPermissionsServiceInterface,
+  needs: string[],
+): Promise<string[]> {
   const permissions = await permissionsService.getAll();
   return missingOrigins(permissions.origins ?? [], needs);
 }
 
-function requestMissingOrigins({ state, setState }: OriginsPermissionsHooks) {
-  const permissionsService = usePermissionService()!;
+function requestMissingOrigins({ state, setState, permissionsService }: OriginsPermissionsHooks) {
   permissionsService
     .request({ origins: state.missingOrigins })
     .then(accepted => {
@@ -58,14 +52,16 @@ function OriginsPermissions({ origins, message, children }: OriginsPermissionsPr
     status: 'idle',
   });
 
-  const hooks: OriginsPermissionsHooks = { state, setState };
-
-  if (!usePermissionService()) {
+  const permissionsService = CreateBrowserPermissionsService();
+  if (!permissionsService) {
+    console.log('No Permissions API available, so origins permissions cannot be verified');
     return children as JSX.Element;
   }
 
+  const hooks: OriginsPermissionsHooks = { state, setState, permissionsService };
+
   useEffect(() => {
-    getMissingOrigins(origins)
+    getMissingOrigins(permissionsService, origins)
       .then(missingOrigins => setState({ ...state, missingOrigins }))
       .catch(error => setState({ ...state, status: 'rejected', error: CreateAppError(error) }));
   }, []);
