@@ -16,7 +16,9 @@ function ToggleSetting({ offText, onText, on, disabled, onClick }: ToggleSetting
   return (
     <div className="toggle-setting">
       <span className={`option ${!on ? 'on' : 'off'}`}>{offText}</span>
-      <Switch id={id} on={on} disabled={disabled} onClick={onClick} />
+      <span className="input-container">
+        <Switch id={id} on={on} disabled={disabled} onClick={onClick} />
+      </span>
       <span className={`option ${on ? 'on' : 'off'}`}>
         <label htmlFor={id}>{onText}</label>
       </span>

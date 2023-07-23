@@ -21,16 +21,20 @@ $color: theme.theme-color(primary);
   cursor: pointer;
 
   input {
-    display: none;
+    position: absolute;
+    height: 0;
+    width: 0;
   }
 
   &:not(.disabled) {
-    &:hover {
+    &:hover,
+    &:focus-within {
       border-color: $color;
       transform: scale(1.1);
     }
 
-    &:active {
+    &:active,
+    &.active {
       transform: scale(0.9);
     }
   }

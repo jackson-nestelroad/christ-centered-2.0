@@ -21,14 +21,16 @@ function TextSetting({ text, value, disabled, placeholder, onChange, onSubmit }:
       <div className="label">
         <label htmlFor={id}>{text}</label>
       </div>
-      <TextInput
-        id={id}
-        value={value}
-        disabled={disabled}
-        placeholder={placeholder}
-        onChange={onChange}
-        onSubmit={onSubmit}
-      />
+      <span className="input-container">
+        <TextInput
+          id={id}
+          value={value}
+          disabled={disabled}
+          placeholder={placeholder}
+          onChange={onChange}
+          onSubmit={onSubmit}
+        />
+      </span>
     </div>
   );
 }

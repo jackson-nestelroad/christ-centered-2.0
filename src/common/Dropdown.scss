@@ -1,0 +1,143 @@
+@use "../theme.scss";
+
+.dropdown {
+  $border-width: 0.125rem;
+
+  display: block;
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: inherit;
+  background-color: white;
+  border: $border-width solid theme.theme-color(secondary);
+  border-radius: 0.3rem;
+  padding: 0.25rem;
+  text-align: inherit;
+  outline: none;
+  transition: 0.2s;
+  user-select: none;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    height: 0;
+    width: 0;
+    border: none;
+    outline: none;
+  }
+
+  &:not(.disabled) {
+    &:focus,
+    &:focus-within,
+    &:active {
+      border-color: theme.theme-color(primary);
+    }
+    &.active {
+      .selected {
+        .arrow {
+          color: theme.theme-color(primary);
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+
+      .dropdown-menu {
+        visibility: visible;
+        transform: scaleY(1);
+        opacity: 1;
+
+        .options {
+          > li {
+            &:hover,
+            &.hover {
+              background-color: rgba(theme.theme-color(primary), 0.15);
+            }
+
+            &:active,
+            &.selected {
+              &:hover,
+              &.hover {
+                background-color: rgba(theme.theme-color(primary), 0.4);
+              }
+              background-color: rgba(theme.theme-color(primary), 0.25);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    background-color: theme.theme-color(disabled-gray);
+  }
+
+  .selected {
+    position: relative;
+    border-radius: 0.25rem 0.25rem 0 0;
+    padding-right: 1.5rem;
+
+    .arrow {
+      position: absolute;
+      left: auto;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: 0.2s;
+      color: inherit;
+    }
+
+    .display {
+      &.placeholder {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &.top {
+    .menu {
+      transform-origin: bottom center;
+      top: auto;
+      bottom: 100%;
+    }
+  }
+
+  .dropdown-menu {
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    top: calc(100% + $border-width);
+    bottom: auto;
+    width: 100%;
+    min-width: 112px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top center;
+    overflow: auto;
+    z-index: 8;
+    transition: 0.2s;
+    border-radius: 0.25rem;
+
+    background-color: white;
+    color: inherit;
+
+    @include theme.elevation(5);
+
+    .options {
+      margin: 0;
+      padding: 0.5rem 0;
+      list-style-type: none;
+
+      > li {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0.25rem 0.5rem;
+        overflow: hidden;
+        transition: 0.2s;
+      }
+    }
+  }
+}

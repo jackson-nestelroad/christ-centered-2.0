@@ -17,7 +17,9 @@ function CheckboxSetting({ text, checked, disabled, onClick }: CheckboxSettingPr
       <span className="option">
         <label htmlFor={id}>{text}</label>
       </span>
-      <Checkbox id={id} checked={checked} disabled={disabled} onClick={onClick} />
+      <span className="input-container">
+        <Checkbox id={id} checked={checked} disabled={disabled} onClick={onClick} />
+      </span>
     </div>
   );
 }

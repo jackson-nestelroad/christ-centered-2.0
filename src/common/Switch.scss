@@ -5,6 +5,7 @@ $height: 1.5rem;
 
 $circle-diameter: calc($height - 0.5rem);
 $circle-margin: 0.25rem;
+$slider-distance: calc($width - $circle-diameter - $circle-margin * 2);
 
 .switch {
   position: relative;
@@ -14,7 +15,41 @@ $circle-margin: 0.25rem;
   cursor: pointer;
 
   input {
-    display: none;
+    position: absolute;
+    height: 0;
+    width: 0;
+  }
+
+  &:not(.disabled) {
+    &:hover,
+    &:focus-within {
+      .slider::before {
+        transform: scale(1.1);
+      }
+    }
+
+    &:active,
+    &.active {
+      .slider::before {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  &.on {
+    &:hover,
+    &:focus-within {
+      .slider::before {
+        transform: translateX($slider-distance) scale(1.1);
+      }
+    }
+
+    &:active,
+    &.active {
+      .slider::before {
+        transform: translateX($slider-distance) scale(0.9);
+      }
+    }
   }
 
   &.disabled {
@@ -29,7 +64,7 @@ $circle-margin: 0.25rem;
   }
 
   &.on .slider::before {
-    transform: translateX(calc($width - $circle-diameter - $circle-margin * 2));
+    transform: translateX($slider-distance);
   }
 
   .slider {
