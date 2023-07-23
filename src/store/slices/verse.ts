@@ -49,6 +49,9 @@ export const verseSlice = createSlice<VerseState, SliceCaseReducers<VerseState>,
       state.status = 'fulfilled';
       state.lastFetchedAt = startOfDay();
     },
+    setVersion: (state, action: PayloadAction<string>) => {
+      state.config.version = action.payload;
+    },
   },
   extraReducers(builder) {
     builder.addCase(fetchVerse.pending, state => {
@@ -67,6 +70,6 @@ export const verseSlice = createSlice<VerseState, SliceCaseReducers<VerseState>,
   },
 });
 
-export const { setVerseSearch, setVerse } = verseSlice.actions;
+export const { setVerseSearch, setVerse, setVersion } = verseSlice.actions;
 
 export default verseSlice.reducer;

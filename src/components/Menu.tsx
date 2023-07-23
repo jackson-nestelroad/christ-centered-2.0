@@ -1,19 +1,22 @@
+import { DailyBread, Language } from 'daily-bread';
 import React from 'react';
 import { batch } from 'react-redux';
 
 import { useGeolocation } from '../context/Geolocation';
 import { useWeather } from '../context/Weather';
 import { StatelessReactHooks } from '../hooks';
+import { DefaultVersions, SupportedLanguages, SupportedVersions, isSupportedLanguage } from '../lib/languages';
 import { fetchVerseForSearch } from '../lib/verse';
 import { fetchWeatherForLocation } from '../lib/weather';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setTwentyFourHour } from '../store/slices/settings';
-import { VerseState, setVerse, setVerseSearch } from '../store/slices/verse';
+import { setLanguage, setTwentyFourHour } from '../store/slices/settings';
+import { VerseState, fetchVerse, setVerse, setVerseSearch, setVersion } from '../store/slices/verse';
 import { setLocation, setTemperatureUnit, setWeatherData, setWeatherDisplay } from '../store/slices/weather';
 import { TemperatureUnit } from '../types/weather';
 import './Menu.scss';
 import AsyncSetting from './settings/AsyncSetting';
 import CheckboxSetting from './settings/CheckboxSetting';
+import SelectSetting from './settings/SelectSetting';
 import ToggleSetting from './settings/ToggleSetting';
 
 type MenuHooks = StatelessReactHooks<'dispatch' | 'geolocation' | 'weather'> & { verse: VerseState };
@@ -54,6 +57,33 @@ async function onSaveVerse({ dispatch, verse }: MenuHooks, value: string, newVal
   batch(() => {
     dispatch(setVerseSearch(newValue));
     dispatch(setVerse(bibleVerse));
+  });
+}
+
+function onSetLanguage({ dispatch }: MenuHooks, language: Language, newLanguage: Language) {
+  if (language === newLanguage) {
+    return;
+  }
+  batch(() => {
+    dispatch(setLanguage(newLanguage));
+    dispatch(setVersion(DefaultVersions[newLanguage]));
+    dispatch(fetchVerse());
+  });
+}
+
+function onSetVersion({ dispatch }: MenuHooks, version: string, newVersion: string) {
+  if (version === newVersion) {
+    return;
+  }
+
+  const dailyBread = new DailyBread();
+  if (!dailyBread.isSupportedVersion(version)) {
+    return;
+  }
+
+  batch(() => {
+    dispatch(setVersion(newVersion));
+    dispatch(fetchVerse());
   });
 }
 
@@ -114,6 +144,21 @@ function Menu() {
           placeholder="Verse"
           failureText="No Bible verses found"
           onSave={value => onSaveVerse(hooks, verse.config.search ?? '', value)}
+        />
+        <SelectSetting
+          text="Language"
+          value={settings.language}
+          options={SupportedLanguages}
+          onSelect={language => onSetLanguage(hooks, settings.language, language)}
+          placeholder="Language"
+        />
+        <SelectSetting
+          text="Version"
+          value={verse.config.version}
+          options={SupportedVersions[settings.language] ?? []}
+          onSelect={version => onSetVersion(hooks, verse.config.version, version)}
+          placeholder="Version"
+          disabled={!isSupportedLanguage(settings.language)}
         />
         <hr />
       </div>

@@ -1,3 +1,4 @@
+import { Language } from 'daily-bread';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
@@ -5,7 +6,7 @@ import { useBrowserStorage } from '../context/BrowserStorage';
 import { BrowserStorageServiceInterface } from '../service/browser-storage';
 import { Environment } from '../service/environment';
 import configureStore, { CreatedStore, RootState, StoreKey, StoreKeys } from '../store/root';
-import { setBackground } from '../store/slices/settings';
+import { setBackground, setLanguage } from '../store/slices/settings';
 import { setVerse } from '../store/slices/verse';
 import { WeatherState } from '../store/slices/weather';
 
@@ -50,6 +51,9 @@ function StoreLoader({ children }: StoreLoaderProps) {
       };
       (globalThis as any).setBackground = (background?: number) => {
         store.dispatch(setBackground(background));
+      };
+      (globalThis as any).setLanguage = (language: Language) => {
+        store.dispatch(setLanguage(language));
       };
     }
 
