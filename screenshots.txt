@@ -1,21 +1,31 @@
-Size: 1400x900
+Size: 1280x800
 
 Verse: Matt 6:33
 Background: 80
 Location: San Jose
+Time: 06/11/2023 09:42:25
 
 Verse: Romans 8:28
 Background: 62
 Location: Dallas
+Time: 07/23/2023 01:04:36
 
 Verse: Psalm 2
 Background: 72
-Location: London
+Location: Dublin
+Time: 08/04/2023 22:58:16
 
 Verse: Matt 6:9-13
 Background: 75
-Location: Oklahoma City
+Location: None
+Time: 04/09/2023 11:50:28
 
 Verse: Jer 29:11
 Background: 6
-Location: New York
+Location: Hong Kong
+Time: 07/18/2023 18:30:42
+
+Verse: John 3:16
+Background: 9
+Location: Tijuana
+Time: 07/22/2023 06:21:27
