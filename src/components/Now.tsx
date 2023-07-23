@@ -48,7 +48,7 @@ function Now() {
         {addLeadingZero(hours)} {addLeadingZero(minutes)} {addLeadingZero(seconds)}
       </p>
       <p className="date">
-        {state.now.toLocaleDateString(undefined, {
+        {now.toLocaleDateString(undefined, {
           weekday: 'long',
           month: 'long',
           day: 'numeric',
