@@ -1,18 +1,24 @@
 # Christ-Centered 2.0
 
+<p align="center">
+<img src="https://github.com/jackson-nestelroad/christ-centered-2.0/blob/master/images/Marquee.png" alt="christ-centered marquee" height="200px">
+</p>
+
 **Christ-Centered** is a Google Chrome extension to override your new tab page with a Bible Verse of the Day.
+
+**[Download for Google Chrome](https://chrome.google.com/webstore/detail/christ-centered/adcoobhgdcnpbmkhajkabmkcfdekdibo)**
+
+**[Download for Firefox](https://addons.mozilla.org/en-US/firefox/addon/christ-centered/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search)**
+
+![new tab page screenshot](https://raw.githubusercontent.com/jackson-nestelroad/christ-centered-2.0/master/images/Screenshot%204.png)
 
 ## Features
 
 - Display the Bible Verse of the Day (from BibleGateway) in your new tab page.
+- Read the Bible in 10 different languages and multiple translations.
 - Display current weather information for your area or for a custom location.
 - Display a custom Bible verse or entire passage via passage lookup.
 - Dynamic width and height resizing.
-
-### Future
-
-- Multiple translations support.
-- Multiple languages support.
 
 ## Installation
 
