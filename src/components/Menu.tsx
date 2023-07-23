@@ -19,6 +19,10 @@ import CheckboxSetting from './settings/CheckboxSetting';
 import SelectSetting from './settings/SelectSetting';
 import ToggleSetting from './settings/ToggleSetting';
 
+interface MenuProps {
+  focusable: boolean;
+}
+
 type MenuHooks = StatelessReactHooks<'dispatch' | 'geolocation' | 'weather'> & { verse: VerseState };
 
 function onToggleTwentyFourHour({ dispatch }: MenuHooks, currentValue: boolean) {
@@ -87,7 +91,7 @@ function onSetVersion({ dispatch }: MenuHooks, version: string, newVersion: stri
   });
 }
 
-function Menu() {
+function Menu({ focusable }: MenuProps) {
   const { verse, weather, settings } = useAppSelector(state => state);
 
   const hooks: MenuHooks = {
@@ -114,18 +118,21 @@ function Menu() {
           offText="12 Hour"
           onText="24 Hour"
           on={settings.twentyFourHour}
+          focusable={focusable}
           onClick={() => onToggleTwentyFourHour(hooks, settings.twentyFourHour)}
         />
         <hr />
         <CheckboxSetting
           text="Enable weather?"
           checked={weather.config.display}
+          focusable={focusable}
           onClick={() => onToggleWeather(hooks, weather.config.display)}
         />
         <ToggleSetting
           offText="Fahrenheit"
           onText="Celsius"
           disabled={!weather.config.display}
+          focusable={focusable}
           on={weather.config.unit !== TemperatureUnit.Fahrenheit}
           onClick={() => onToggleTemperatureUnit(hooks, weather.config.unit)}
         />
@@ -133,6 +140,7 @@ function Menu() {
           text="Location (blank for current location)"
           value={weather.config.location ?? ''}
           disabled={!weather.config.display}
+          focusable={focusable}
           placeholder="Location"
           failureText="No weather data found"
           onSave={value => onSaveLocation(hooks, weather.config.location ?? '', value)}
@@ -141,6 +149,7 @@ function Menu() {
         <AsyncSetting
           text="Bible Verse (blank for verse of the day)"
           value={verse.config.search ?? ''}
+          focusable={focusable}
           placeholder="Verse"
           failureText="No Bible verses found"
           onSave={value => onSaveVerse(hooks, verse.config.search ?? '', value)}
@@ -149,6 +158,7 @@ function Menu() {
           text="Language"
           value={settings.language}
           options={SupportedLanguages}
+          focusable={focusable}
           onSelect={language => onSetLanguage(hooks, settings.language, language)}
           placeholder="Language"
         />
@@ -156,6 +166,7 @@ function Menu() {
           text="Version"
           value={verse.config.version}
           options={SupportedVersions[settings.language] ?? []}
+          focusable={focusable}
           onSelect={version => onSetVersion(hooks, verse.config.version, version)}
           placeholder="Version"
           disabled={!isSupportedLanguage(settings.language)}

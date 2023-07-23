@@ -17,6 +17,7 @@ interface AsyncSettingProps {
   text: string;
   value: string;
   disabled?: boolean;
+  focusable?: boolean;
   placeholder?: string;
   failureText: string;
   onSave: SaveCallback;
@@ -73,7 +74,7 @@ function helpText({ state }: AsyncSettingHooks, failureText: string): string {
   }
 }
 
-function AsyncSetting({ text, value, disabled, placeholder, failureText, onSave }: AsyncSettingProps) {
+function AsyncSetting({ text, value, disabled, focusable, placeholder, failureText, onSave }: AsyncSettingProps) {
   const [state, setState] = useState<AsyncSettingState>({ value, status: Status.Initial });
   const hooks = { state, setState };
 
@@ -83,6 +84,7 @@ function AsyncSetting({ text, value, disabled, placeholder, failureText, onSave 
         text={text}
         value={state.value}
         disabled={disabled}
+        focusable={focusable}
         placeholder={placeholder}
         onChange={value => onChange(hooks, value)}
         onSubmit={() => onSubmit(hooks, onSave)}
@@ -94,6 +96,7 @@ function AsyncSetting({ text, value, disabled, placeholder, failureText, onSave 
 
 AsyncSetting.defaultProps = {
   disabled: false,
+  focusable: true,
   placeholder: '',
 };
 

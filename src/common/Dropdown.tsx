@@ -20,6 +20,7 @@ interface DropdownProps<T extends Key> {
   options: DropdownOptions<T>;
   value?: T;
   disabled?: boolean;
+  focusable?: boolean;
   placeholder?: string;
   // eslint-disable-next-line react/no-unused-prop-types
   onSelect: DropdownCallback<T>;
@@ -172,7 +173,7 @@ function Dropdown<T extends Key>(props: DropdownProps<T>) {
   const menu = useRef<HTMLDivElement>(null);
   const menuOptions = useRef<HTMLUListElement>(null);
 
-  const { id, options, value, disabled, placeholder } = props;
+  const { id, options, value, disabled, focusable, placeholder } = props;
 
   const selectedOptionIndex = options.findIndex(({ value: optionValue }) => optionValue === value);
   const selectedOption = options[selectedOptionIndex];
@@ -224,8 +225,9 @@ function Dropdown<T extends Key>(props: DropdownProps<T>) {
       className={`dropdown ${state.top ? 'top' : 'bottom'} ${state.active ? 'active' : 'inactive'} ${
         disabled ? 'disabled' : ''
       }`}
-      tabIndex={0}
+      tabIndex={disabled || !focusable ? -1 : 0}
       ref={dropdown}
+      aria-disabled={disabled}
     >
       <input id={id} type="text" value={value} readOnly disabled={disabled} placeholder={placeholder} tabIndex={-1} />
       <div className="selected">
@@ -247,6 +249,7 @@ Dropdown.defaultProps = {
   id: undefined,
   value: undefined,
   disabled: false,
+  focusable: true,
   placeholder: undefined,
 };
 

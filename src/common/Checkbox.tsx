@@ -9,6 +9,7 @@ interface CheckboxProps {
   id?: string;
   checked: boolean;
   disabled?: boolean;
+  focusable?: boolean;
   // eslint-disable-next-line react/no-unused-prop-types
   onClick: CheckboxCallback;
 }
@@ -48,7 +49,7 @@ function onKeyUp({ stateRef, setStateRef }: CheckboxHooks, _: KeyboardEvent) {
 }
 
 function Checkbox(props: CheckboxProps) {
-  const { id, checked, disabled } = props;
+  const { id, checked, disabled, focusable } = props;
   const [state, setState] = useState<CheckboxState>({ active: false });
   const stateRef = useRef(state);
   const setStateRef = defaultSetStateRef(stateRef, setState);
@@ -72,6 +73,8 @@ function Checkbox(props: CheckboxProps) {
       className={`checkbox ${checked ? 'checked' : 'unchecked'} ${disabled ? 'disabled' : ''} ${
         state.active ? 'active' : 'inactive'
       }`}
+      aria-checked={checked}
+      aria-disabled={disabled}
       onClick={() => onClick(hooks, props)}
     >
       <input
@@ -80,7 +83,7 @@ function Checkbox(props: CheckboxProps) {
         checked={checked}
         disabled={disabled}
         readOnly
-        tabIndex={disabled ? -1 : 0}
+        tabIndex={disabled || !focusable ? -1 : 0}
         ref={input}
       />
       <div className="checkmark-container">
@@ -93,6 +96,7 @@ function Checkbox(props: CheckboxProps) {
 Checkbox.defaultProps = {
   id: '',
   disabled: false,
+  focusable: true,
 };
 
 export default Checkbox;

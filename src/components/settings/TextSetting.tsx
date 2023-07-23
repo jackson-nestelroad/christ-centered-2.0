@@ -9,12 +9,13 @@ interface TextSettingProps {
   text: string;
   value: string;
   disabled?: boolean;
+  focusable?: boolean;
   placeholder?: string;
   onChange: TextInputCallback;
   onSubmit: TextInputCallback;
 }
 
-function TextSetting({ text, value, disabled, placeholder, onChange, onSubmit }: TextSettingProps) {
+function TextSetting({ text, value, disabled, focusable, placeholder, onChange, onSubmit }: TextSettingProps) {
   const id = useId();
   return (
     <div className="text-setting">
@@ -26,6 +27,7 @@ function TextSetting({ text, value, disabled, placeholder, onChange, onSubmit }:
           id={id}
           value={value}
           disabled={disabled}
+          focusable={focusable}
           placeholder={placeholder}
           onChange={onChange}
           onSubmit={onSubmit}
@@ -37,6 +39,7 @@ function TextSetting({ text, value, disabled, placeholder, onChange, onSubmit }:
 
 TextSetting.defaultProps = {
   disabled: false,
+  focusable: true,
   placeholder: '',
 };
 

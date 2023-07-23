@@ -12,7 +12,7 @@ interface HamburgerProps {
 }
 
 function Hamburger({ width, style, open, onClick }: HamburgerProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
 
   const containerStyle: CSSProperties = {
     ...style,
@@ -21,15 +21,17 @@ function Hamburger({ width, style, open, onClick }: HamburgerProps) {
 
   return (
     <div className="hamburger-container" style={containerStyle}>
-      <div
+      <button
+        type="button"
         className={`hamburger ${open ? 'open' : 'closed'} ${open ? 'dark' : 'light'}`}
         onClick={() => onClick()}
         ref={ref}
+        tabIndex={0}
       >
         <div className="line" />
         <div className="line" />
         <div className="line" />
-      </div>
+      </button>
     </div>
   );
 }

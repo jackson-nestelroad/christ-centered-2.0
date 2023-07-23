@@ -10,6 +10,7 @@ interface SelectSettingProps<T extends Key> {
   options: DropdownOptions<T>;
   value?: T;
   disabled?: boolean;
+  focusable?: boolean;
   placeholder?: string;
   onSelect: SelectCallback<T>;
 }
@@ -19,6 +20,7 @@ function SelectSetting<T extends Key>({
   options,
   value,
   disabled,
+  focusable,
   placeholder,
   onSelect,
 }: SelectSettingProps<T>) {
@@ -34,6 +36,7 @@ function SelectSetting<T extends Key>({
           options={options}
           value={value}
           disabled={disabled}
+          focusable={focusable}
           placeholder={placeholder}
           onSelect={onSelect}
         />
@@ -45,6 +48,7 @@ function SelectSetting<T extends Key>({
 SelectSetting.defaultProps = {
   value: undefined,
   disabled: false,
+  focusable: true,
   placeholder: '',
 };
 

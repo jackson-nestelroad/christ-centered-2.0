@@ -9,6 +9,7 @@ interface SwitchProps {
   id?: string;
   on: boolean;
   disabled?: boolean;
+  focusable?: boolean;
   // eslint-disable-next-line react/no-unused-prop-types
   onClick: SwitchCallback;
 }
@@ -48,7 +49,7 @@ function onKeyUp({ stateRef, setStateRef }: SwitchHooks, _: KeyboardEvent) {
 }
 
 function Switch(props: SwitchProps) {
-  const { id, on, disabled } = props;
+  const { id, on, disabled, focusable } = props;
   const [state, setState] = useState<SwitchState>({ active: false });
   const stateRef = useRef(state);
   const setStateRef = defaultSetStateRef(stateRef, setState);
@@ -70,6 +71,8 @@ function Switch(props: SwitchProps) {
   return (
     <div
       className={`switch ${on ? 'on' : 'off'} ${disabled ? 'disabled' : ''} ${state.active ? 'active' : 'inactive'}`}
+      aria-checked={on}
+      aria-disabled={disabled}
       onClick={() => onClick(hooks, props)}
     >
       <input
@@ -78,7 +81,7 @@ function Switch(props: SwitchProps) {
         checked={on}
         disabled={disabled}
         readOnly
-        tabIndex={disabled ? -1 : 0}
+        tabIndex={disabled || !focusable ? -1 : 0}
         ref={input}
       />
       <span className="slider" />
@@ -89,6 +92,7 @@ function Switch(props: SwitchProps) {
 Switch.defaultProps = {
   id: '',
   disabled: false,
+  focusable: true,
 };
 
 export default Switch;

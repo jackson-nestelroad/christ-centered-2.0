@@ -8,6 +8,7 @@ interface TextInputProps {
   id?: string;
   value: string;
   disabled?: boolean;
+  focusable?: boolean;
   placeholder?: string;
   // eslint-disable-next-line react/no-unused-prop-types
   onChange: TextInputCallback;
@@ -28,7 +29,7 @@ function onKeyDown({ value, disabled, onSubmit }: TextInputProps, event: Keyboar
 }
 
 function TextInput(props: TextInputProps) {
-  const { id, value, disabled, placeholder } = props;
+  const { id, value, disabled, focusable, placeholder } = props;
   return (
     <input
       id={id}
@@ -37,6 +38,7 @@ function TextInput(props: TextInputProps) {
       value={value}
       disabled={disabled}
       placeholder={placeholder}
+      tabIndex={disabled || !focusable ? -1 : 0}
       onChange={event => onChange(props, event.target.value)}
       onKeyDown={event => onKeyDown(props, event)}
     />
@@ -46,6 +48,7 @@ function TextInput(props: TextInputProps) {
 TextInput.defaultProps = {
   id: '',
   disabled: false,
+  focusable: true,
   placeholder: '',
 };
 

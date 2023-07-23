@@ -38,7 +38,7 @@ function MenuWrapper({ children }: MenuWrapperProps) {
       />
       <div className="menu-wrapper-container" style={containerStyle}>
         <div className="menu-wrapper-menu" style={menuStyle}>
-          <Menu />
+          <Menu focusable={state.open} />
         </div>
         <div className="menu-wrapper-content">{children}</div>
       </div>

@@ -1,3 +1,5 @@
+@use "../theme.scss";
+
 $line-height: 0.125rem;
 $line-margin: 0.25rem;
 $hamburger-height: calc($line-height * 3 + $line-margin * 2);
@@ -13,6 +15,12 @@ $hamburger-height: calc($line-height * 3 + $line-margin * 2);
 
   .hamburger {
     width: 100%;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-color: transparent;
+    padding: 0;
+    transition: transform 0.2s;
     cursor: pointer;
 
     &.light {
@@ -25,6 +33,15 @@ $hamburger-height: calc($line-height * 3 + $line-margin * 2);
       .line {
         background-color: black;
       }
+    }
+
+    &:focus-visible {
+      outline: 0.125rem solid theme.theme-color(primary);
+      outline-offset: 0.125rem;
+    }
+
+    &:active {
+      transform: scale(0.9);
     }
 
     .line {
