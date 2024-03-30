@@ -1,7 +1,7 @@
 {
   "name": "christ-centered",
   "description": "Google Chrome extension to display Bible verses.",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
