@@ -9,7 +9,7 @@ import { DefaultVersions, SupportedLanguages, SupportedVersions, isSupportedLang
 import { fetchVerseForSearch } from '../lib/verse';
 import { fetchWeatherForLocation } from '../lib/weather';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setLanguage, setTwentyFourHour } from '../store/slices/settings';
+import { setHourLeadingZero, setLanguage, setTwentyFourHour } from '../store/slices/settings';
 import { VerseState, fetchVerse, setVerse, setVerseSearch, setVersion } from '../store/slices/verse';
 import { setLocation, setTemperatureUnit, setWeatherData, setWeatherDisplay } from '../store/slices/weather';
 import { TemperatureUnit } from '../types/weather';
@@ -27,6 +27,10 @@ type MenuHooks = StatelessReactHooks<'dispatch' | 'geolocation' | 'weather'> & {
 
 function onToggleTwentyFourHour({ dispatch }: MenuHooks, currentValue: boolean) {
   dispatch(setTwentyFourHour(!currentValue));
+}
+
+function onToggleHourLeadingZero({ dispatch }: MenuHooks, currentValue: boolean) {
+  dispatch(setHourLeadingZero(!currentValue));
 }
 
 function onToggleTemperatureUnit({ dispatch }: MenuHooks, currentValue: TemperatureUnit) {
@@ -120,6 +124,14 @@ function Menu({ focusable }: MenuProps) {
           on={settings.twentyFourHour}
           focusable={focusable}
           onClick={() => onToggleTwentyFourHour(hooks, settings.twentyFourHour)}
+        />
+        <ToggleSetting
+          headerText="Hour Leading Zero"
+          offText="Off"
+          onText="On"
+          on={settings.hourLeadingZero}
+          focusable={focusable}
+          onClick={() => onToggleHourLeadingZero(hooks, settings.hourLeadingZero)}
         />
         <hr />
         <CheckboxSetting

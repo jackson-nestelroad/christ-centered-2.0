@@ -1,18 +1,25 @@
 .toggle-setting {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  > * {
-    padding: 0 0.25rem;
+  > label {
+    display: block;
+    margin-bottom: 0.5rem;
   }
 
-  .option {
-    text-align: center;
-    flex: 1;
+  .toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    &.on {
-      font-weight: 800;
+    > * {
+      padding: 0 0.25rem;
+    }
+
+    .option {
+      text-align: center;
+      flex: 1;
+
+      &.on {
+        font-weight: 800;
+      }
     }
   }
 }

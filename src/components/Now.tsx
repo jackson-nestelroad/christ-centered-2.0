@@ -24,7 +24,7 @@ function Now() {
     };
   }
 
-  const { twentyFourHour } = useAppSelector(state => state.settings);
+  const { twentyFourHour, hourLeadingZero } = useAppSelector(state => state.settings);
 
   setTimeout(() => {
     setState(state => ({ ...state, now: new Date() }));
@@ -45,7 +45,7 @@ function Now() {
   return (
     <div className="now">
       <p className="time">
-        {addLeadingZero(hours)} {addLeadingZero(minutes)} {addLeadingZero(seconds)}
+        {hourLeadingZero ? addLeadingZero(hours) : hours} {addLeadingZero(minutes)} {addLeadingZero(seconds)}
       </p>
       <p className="date">
         {now.toLocaleDateString(undefined, {
