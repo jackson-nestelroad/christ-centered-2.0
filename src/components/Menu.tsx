@@ -10,7 +10,14 @@ import { fetchVerseForSearch } from '../lib/verse';
 import { fetchWeatherForLocation } from '../lib/weather';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setHourLeadingZero, setLanguage, setTwentyFourHour } from '../store/slices/settings';
-import { VerseState, fetchVerse, setVerse, setVerseSearch, setVersion } from '../store/slices/verse';
+import {
+  VerseState,
+  fetchVerse,
+  setUseHomepageForVerseOfTheDay,
+  setVerse,
+  setVerseSearch,
+  setVersion,
+} from '../store/slices/verse';
 import { setLocation, setTemperatureUnit, setWeatherData, setWeatherDisplay } from '../store/slices/weather';
 import { TemperatureUnit } from '../types/weather';
 import './Menu.scss';
@@ -61,7 +68,7 @@ async function onSaveVerse({ dispatch, verse }: MenuHooks, value: string, newVal
   if (value == newValue) {
     return;
   }
-  const bibleVerse = await fetchVerseForSearch(verse.config, newValue);
+  const bibleVerse = await fetchVerseForSearch(verse.config, verse.dailyBreadConfig, newValue);
   batch(() => {
     dispatch(setVerseSearch(newValue));
     dispatch(setVerse(bibleVerse));
@@ -91,6 +98,13 @@ function onSetVersion({ dispatch }: MenuHooks, version: string, newVersion: stri
 
   batch(() => {
     dispatch(setVersion(newVersion));
+    dispatch(fetchVerse());
+  });
+}
+
+function onToggleUseHomepageForVerseOfTheDay({ dispatch }: MenuHooks, currentValue: boolean) {
+  batch(() => {
+    dispatch(setUseHomepageForVerseOfTheDay(!currentValue));
     dispatch(fetchVerse());
   });
 }
@@ -182,6 +196,13 @@ function Menu({ focusable }: MenuProps) {
           onSelect={version => onSetVersion(hooks, verse.config.version, version)}
           placeholder="Version"
           disabled={!isSupportedLanguage(settings.language)}
+        />
+        <hr />
+        <CheckboxSetting
+          text="Use Bible Gateway homepage for Verse of the Day?"
+          checked={verse.dailyBreadConfig.useHomepageForVerseOfTheDay}
+          focusable={focusable}
+          onClick={() => onToggleUseHomepageForVerseOfTheDay(hooks, verse.dailyBreadConfig.useHomepageForVerseOfTheDay)}
         />
         <hr />
       </div>

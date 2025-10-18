@@ -8,12 +8,17 @@ import { startOfDay } from '../../util/time';
 import { DefaultState } from '../defaults';
 import { RootState } from '../root';
 
+export interface DailyBreadConfig {
+  useHomepageForVerseOfTheDay: boolean;
+}
+
 export interface VerseState {
   status: Status;
   verse?: BibleVerse;
   lastFetchedAt?: number;
   error?: AppError;
   config: VerseConfig;
+  dailyBreadConfig: DailyBreadConfig;
 }
 
 export const DefaultVerseState: DefaultState<VerseState> = {
@@ -21,13 +26,16 @@ export const DefaultVerseState: DefaultState<VerseState> = {
   config: {
     version: 'NIV',
   },
+  dailyBreadConfig: {
+    useHomepageForVerseOfTheDay: false,
+  },
 };
 
 export const fetchVerse = createAsyncThunk<BibleVerse, void, { state: RootState }>(
   'verse/fetchVerse',
   async (_: void, { getState }) => {
     const { verse } = getState();
-    return fetchVerseForSearch(verse.config, verse.config.search);
+    return await fetchVerseForSearch(verse.config, verse.dailyBreadConfig, verse.config.search);
   },
 );
 
@@ -37,6 +45,9 @@ export const verseSlice = createSlice<VerseState, SliceCaseReducers<VerseState>,
     status: 'idle',
     config: {
       version: 'NIV',
+    },
+    dailyBreadConfig: {
+      useHomepageForVerseOfTheDay: false,
     },
   },
   reducers: {
@@ -51,6 +62,9 @@ export const verseSlice = createSlice<VerseState, SliceCaseReducers<VerseState>,
     },
     setVersion: (state, action: PayloadAction<string>) => {
       state.config.version = action.payload;
+    },
+    setUseHomepageForVerseOfTheDay: (state, action: PayloadAction<boolean>) => {
+      state.dailyBreadConfig.useHomepageForVerseOfTheDay = action.payload;
     },
   },
   extraReducers(builder) {
@@ -70,6 +84,6 @@ export const verseSlice = createSlice<VerseState, SliceCaseReducers<VerseState>,
   },
 });
 
-export const { setVerseSearch, setVerse, setVersion } = verseSlice.actions;
+export const { setVerseSearch, setVerse, setVersion, setUseHomepageForVerseOfTheDay } = verseSlice.actions;
 
 export default verseSlice.reducer;
