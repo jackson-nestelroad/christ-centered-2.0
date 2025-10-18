@@ -5,11 +5,12 @@ import { batch } from 'react-redux';
 import { useGeolocation } from '../context/Geolocation';
 import { useWeather } from '../context/Weather';
 import { StatelessReactHooks } from '../hooks';
+import { fetchImage } from '../lib/background';
 import { DefaultVersions, SupportedLanguages, SupportedVersions, isSupportedLanguage } from '../lib/languages';
 import { fetchVerseForSearch } from '../lib/verse';
 import { fetchWeatherForLocation } from '../lib/weather';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setHourLeadingZero, setLanguage, setTwentyFourHour } from '../store/slices/settings';
+import { setBackground, setHourLeadingZero, setLanguage, setTwentyFourHour } from '../store/slices/settings';
 import {
   VerseState,
   fetchVerse,
@@ -100,6 +101,16 @@ function onSetVersion({ dispatch }: MenuHooks, version: string, newVersion: stri
     dispatch(setVersion(newVersion));
     dispatch(fetchVerse());
   });
+}
+
+async function onSaveCustomBackground({ dispatch }: MenuHooks, value: string, newValue: string): Promise<void> {
+  if (value == newValue) {
+    return;
+  }
+  if (newValue) {
+    await fetchImage(newValue);
+  }
+  dispatch(setBackground(newValue));
 }
 
 function onToggleUseHomepageForVerseOfTheDay({ dispatch }: MenuHooks, currentValue: boolean) {
@@ -196,6 +207,15 @@ function Menu({ focusable }: MenuProps) {
           onSelect={version => onSetVersion(hooks, verse.config.version, version)}
           placeholder="Version"
           disabled={!isSupportedLanguage(settings.language)}
+        />
+        <hr />
+        <AsyncSetting
+          text="Custom Background URL (blank for random)"
+          value={settings.background?.toString() ?? ''}
+          focusable={focusable}
+          placeholder="Image URL"
+          failureText="No image found"
+          onSave={value => onSaveCustomBackground(hooks, settings.background?.toString() ?? '', value)}
         />
         <hr />
         <CheckboxSetting

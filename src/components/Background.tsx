@@ -2,59 +2,80 @@ import React, { useEffect, useState } from 'react';
 
 import { BackgroundImage, BackgroundImages } from '../data/backgrounds';
 import { ReactHooks } from '../hooks';
-import { useAppSelector } from '../store/hooks';
+import { fetchImage } from '../lib/background';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { clearBackground } from '../store/slices/settings';
 import './Background.scss';
 
 interface BackgroundProps {
   children?: React.ReactNode;
 }
 
+type Image = BackgroundImage | string;
+
 interface BackgroundState {
-  image: BackgroundImage;
-  loaded: boolean;
+  image?: Image;
 }
 
-type BackgroundHooks = ReactHooks<BackgroundState, 'setState'>;
+type BackgroundHooks = ReactHooks<BackgroundState, 'dispatch' | 'setState'>;
 
 function randomImage(): BackgroundImage {
   return BackgroundImages[Math.floor(Math.random() * BackgroundImages.length)];
 }
 
-function imageURL(image: BackgroundImage): string {
+function backgroundImageURL(image: BackgroundImage): string {
   return `images/backgrounds/${image.file}`;
 }
 
-async function fetchImage({ state, setState }: BackgroundHooks) {
-  await new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = () => reject();
-    image.src = imageURL(state.image);
-  });
-  setState({ ...state, loaded: true });
+function imageURL(image: Image): string {
+  return typeof image === 'string' ? image : backgroundImageURL(image);
+}
+
+function needImageUpdate(a: Image, b: Image): boolean {
+  return imageURL(a) !== imageURL(b);
+}
+
+async function loadImage({ state, setState, dispatch }: BackgroundHooks, image: Image) {
+  try {
+    await fetchImage(imageURL(image));
+    setState({ ...state, image });
+  } catch {
+    dispatch(clearBackground(undefined));
+  }
+}
+
+function currentImage(background?: string | number): Image {
+  if (typeof background === 'string') {
+    return background;
+  }
+  if (typeof background === 'number' && background >= 0 && background < BackgroundImages.length) {
+    return BackgroundImages[background];
+  }
+  return randomImage();
 }
 
 function Background({ children }: BackgroundProps) {
-  const background = useAppSelector(state => state.settings.background);
+  const { background } = useAppSelector(state => state.settings);
+
   const [state, setState] = useState<BackgroundState>({
-    image:
-      background !== undefined && background !== null && background >= 0 && background < BackgroundImages.length
-        ? BackgroundImages[background]
-        : randomImage(),
-    loaded: false,
+    image: undefined,
   });
 
-  const hooks: BackgroundHooks = { state, setState };
+  const dispatch = useAppDispatch();
+  const hooks: BackgroundHooks = { state, setState, dispatch };
 
   useEffect(() => {
-    fetchImage(hooks);
-  }, []);
+    const image = currentImage(background);
+    if (!state.image || needImageUpdate(image, state.image)) {
+      loadImage(hooks, image);
+    }
+  }, [background]);
 
   return (
     <div
-      className={['background', state.loaded ? 'loaded' : 'unloaded'].join(' ')}
+      className={['background', state.image ? 'loaded' : 'unloaded'].join(' ')}
       style={{
-        backgroundImage: state.loaded
+        backgroundImage: state.image
           ? `linear-gradient(${[
               'to bottom',
               'rgba(0,0,0,0.1) 0%',
@@ -67,9 +88,11 @@ function Background({ children }: BackgroundProps) {
       }}
     >
       {children}
-      <div className="source">
-        <a href={state.image.url}>{state.image.credit}</a>
-      </div>
+      {state.image && typeof state.image !== 'string' ? (
+        <div className="source">
+          <a href={state.image.url}>{state.image.credit}</a>
+        </div>
+      ) : undefined}
     </div>
   );
 }

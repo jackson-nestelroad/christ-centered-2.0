@@ -6,14 +6,13 @@ import { DefaultState } from '../defaults';
 export interface SettingsState {
   twentyFourHour: boolean;
   hourLeadingZero: boolean;
-  background?: number;
   language: Language;
+  background?: string | number;
 }
 
 export const DefaultSettingsState: DefaultState<SettingsState> = {
   twentyFourHour: false,
   hourLeadingZero: true,
-  background: undefined,
   language: Language.English,
 };
 
@@ -22,7 +21,6 @@ export const settingsSlice = createSlice<SettingsState, SliceCaseReducers<Settin
   initialState: {
     twentyFourHour: false,
     hourLeadingZero: true,
-    background: undefined,
     language: Language.English,
   },
   reducers: {
@@ -32,9 +30,11 @@ export const settingsSlice = createSlice<SettingsState, SliceCaseReducers<Settin
     setHourLeadingZero: (state, action: PayloadAction<boolean>) => {
       state.hourLeadingZero = action.payload;
     },
-    setBackground: (state, action: PayloadAction<number | undefined>) => {
-      const value = action.payload ? action.payload - 1 : action.payload;
-      state.background = value;
+    setBackground: (state, action: PayloadAction<string | undefined>) => {
+      state.background = action.payload;
+    },
+    clearBackground: state => {
+      state.background = undefined;
     },
     setLanguage: (state, action: PayloadAction<Language>) => {
       state.language = action.payload;
@@ -42,6 +42,7 @@ export const settingsSlice = createSlice<SettingsState, SliceCaseReducers<Settin
   },
 });
 
-export const { setTwentyFourHour, setHourLeadingZero, setBackground, setLanguage } = settingsSlice.actions;
+export const { setTwentyFourHour, setHourLeadingZero, setBackground, clearBackground, setLanguage } =
+  settingsSlice.actions;
 
 export default settingsSlice.reducer;
