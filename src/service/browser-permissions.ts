@@ -36,7 +36,7 @@ export function CreateBrowserPermissionsService(): BrowserPermissionsServiceInte
   if (typeof browser !== 'undefined' && browser?.storage?.sync) {
     return new FirefoxPermissionsService();
   }
-  if (chrome?.storage?.sync) {
+  if (typeof chrome !== 'undefined' && chrome?.storage?.sync) {
     return new ChromePermissionsService();
   }
   return null;

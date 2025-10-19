@@ -71,7 +71,7 @@ export function CreateBrowserStorageService(): BrowserStorageServiceInterface {
     console.log('Running in Firefox');
     return new FirefoxSyncStorageService();
   }
-  if (chrome?.storage?.sync) {
+  if (typeof chrome !== 'undefined' && chrome?.storage?.sync) {
     console.log('Running in Chrome');
     return new ChromeSyncStorageService();
   }
