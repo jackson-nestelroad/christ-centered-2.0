@@ -27,7 +27,7 @@ const DefaultRootState: { [key in StoreKey]: DefaultState<RootState[key]> } = {
  * Configures the store with the given preloaded state.
  *
  * The preloaded state is potentially modified in place to receive default values and remove extra keys.
- * @param preloadedState Preloaded state, typically retrived from browser storage.
+ * @param preloadedState Preloaded state, typically retrieved from browser storage.
  * @param storage Storage service to synchronize state changes to.
  * @returns Created store.
  */
