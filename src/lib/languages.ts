@@ -27,6 +27,7 @@ export const DefaultVersions: { [language in Language]: string } = {
   [Language.German]: 'LUTH1545',
   [Language.Italian]: 'CEI',
   [Language.Hindi]: 'ERV-HI',
+  [Language.Latin]: 'VULGATE',
 };
 
 export function isSupportedLanguage(language: string): language is Language {
