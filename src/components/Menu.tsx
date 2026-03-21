@@ -222,6 +222,7 @@ function Menu({ focusable }: MenuProps) {
           text="Use Bible Gateway homepage for Verse of the Day?"
           checked={verse.dailyBreadConfig.useHomepageForVerseOfTheDay}
           focusable={focusable}
+          title="European countries may block parts of Bible Gateway. Use this option if you are in Europe and having difficulty with fetching verses." // eslint-disable-line max-len
           onClick={() => onToggleUseHomepageForVerseOfTheDay(hooks, verse.dailyBreadConfig.useHomepageForVerseOfTheDay)}
         />
         <hr />

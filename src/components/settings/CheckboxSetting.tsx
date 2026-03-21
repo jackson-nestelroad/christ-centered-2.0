@@ -8,13 +8,14 @@ interface CheckboxSettingProps {
   checked: boolean;
   disabled?: boolean;
   focusable?: boolean;
+  title?: string;
   onClick: () => void;
 }
 
-function CheckboxSetting({ text, checked, disabled, focusable, onClick }: CheckboxSettingProps) {
+function CheckboxSetting({ text, checked, disabled, focusable, title, onClick }: CheckboxSettingProps) {
   const id = useId();
   return (
-    <div className="checkbox-setting">
+    <div className={`checkbox-setting ${title ? 'title' : ''}`} title={title}>
       <span className="option">
         <label htmlFor={id}>{text}</label>
       </span>
@@ -28,6 +29,7 @@ function CheckboxSetting({ text, checked, disabled, focusable, onClick }: Checkb
 CheckboxSetting.defaultProps = {
   disabled: false,
   focusable: true,
+  title: undefined,
 };
 
 export default CheckboxSetting;
