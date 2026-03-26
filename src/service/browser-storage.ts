@@ -33,15 +33,15 @@ class BrowserStorageAreaStorageService implements BrowserStorageServiceInterface
   }
 }
 
-export class FirefoxSyncStorageService extends BrowserStorageAreaStorageService {
+class FirefoxLocalStorageService extends BrowserStorageAreaStorageService {
   public constructor() {
-    super(browser.storage.sync);
+    super(browser.storage.local);
   }
 }
 
-export class ChromeSyncStorageService extends BrowserStorageAreaStorageService {
+class ChromeLocalStorageService extends BrowserStorageAreaStorageService {
   public constructor() {
-    super(chrome.storage.sync);
+    super(chrome.storage.local);
   }
 }
 
@@ -66,14 +66,25 @@ class LocalStorageService implements BrowserStorageServiceInterface {
   }
 }
 
-export function CreateBrowserStorageService(): BrowserStorageServiceInterface {
-  if (typeof browser !== 'undefined' && browser?.storage?.sync) {
-    console.log('Running in Firefox');
-    return new FirefoxSyncStorageService();
+async function copyStorageIfNeeded(source: StorageArea, destination: StorageArea) {
+  const storage = await source.get(null as any);
+  if (!storage || Object.keys(storage).length === 0) {
+    return;
   }
-  if (typeof chrome !== 'undefined' && chrome?.storage?.sync) {
+  destination.set(storage);
+  source.clear();
+}
+
+export async function CreateBrowserStorageService(): Promise<BrowserStorageServiceInterface> {
+  if (typeof browser !== 'undefined' && browser?.storage?.local) {
+    console.log('Running in Firefox');
+    await copyStorageIfNeeded(browser.storage.sync, browser.storage.local);
+    return new FirefoxLocalStorageService();
+  }
+  if (typeof chrome !== 'undefined' && chrome?.storage?.local) {
     console.log('Running in Chrome');
-    return new ChromeSyncStorageService();
+    await copyStorageIfNeeded(chrome.storage.sync, chrome.storage.local);
+    return new ChromeLocalStorageService();
   }
   if (localStorage) {
     console.log('Running in a web page');

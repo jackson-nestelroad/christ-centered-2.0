@@ -1,11 +1,14 @@
-import React, { ReactNode, createContext, useContext, useState } from 'react';
+import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
+import ShowAppError from '../components/ShowAppError';
 import { BrowserStorageServiceInterface, CreateBrowserStorageService } from '../service/browser-storage';
+import { AppError, CreateAppError } from '../util/error';
 
 const BrowserStorageContext = createContext<BrowserStorageServiceInterface>(undefined as unknown as any);
 
 interface BrowserStorageProviderState {
-  service: BrowserStorageServiceInterface;
+  service?: BrowserStorageServiceInterface;
+  error?: AppError;
 }
 
 interface BrowserStorageProviderProps {
@@ -18,9 +21,23 @@ interface BrowserStorageProviderProps {
  * Use `useBrowserStorage` to access the browser storage.
  */
 function BrowserStorageProvider({ children }: BrowserStorageProviderProps) {
-  const [state] = useState<BrowserStorageProviderState>({
-    service: CreateBrowserStorageService(),
+  const [state, setState] = useState<BrowserStorageProviderState>({
+    service: undefined,
+    error: undefined,
   });
+  useEffect(() => {
+    CreateBrowserStorageService()
+      .then(service => {
+        setState({ ...state, service });
+      })
+      .catch(error => setState({ ...state, error: CreateAppError(error) }));
+  }, []);
+  if (!state.service) {
+    if (state.error) {
+      return <ShowAppError error={state.error} />;
+    }
+    return null;
+  }
   return <BrowserStorageContext.Provider value={state.service}>{children}</BrowserStorageContext.Provider>;
 }
 

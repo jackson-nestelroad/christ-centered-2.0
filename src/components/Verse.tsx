@@ -72,6 +72,9 @@ function Verse() {
   useEffect(() => {
     // Need new Verse of the Day.
     if ((!config.search && lastFetchedAt !== startOfDay()) || status !== 'fulfilled' || error) {
+      if (status === 'loading') {
+        return;
+      }
       dispatch(fetchVerse());
       setState(initialState);
       return;
@@ -88,7 +91,7 @@ function Verse() {
       fetchFullChapter(hooks, config, dailyBreadConfig, verse);
       return;
     }
-  });
+  }, [state, config, status, error, verse]);
 
   // Verse state error.
   if (status === 'rejected') {

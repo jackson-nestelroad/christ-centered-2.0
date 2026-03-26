@@ -23,7 +23,7 @@ export async function fetchVerseForSearch(
   dailyBreadConfig: DailyBreadConfig,
   search?: string,
 ): Promise<BibleVerse> {
-  console.log('Fetching verse');
+  console.log('Fetching verse:', search || 'votd');
 
   const bible = createDailyBread(config, dailyBreadConfig);
   const result = await (search ? bible.getOne(search) : bible.votd());
