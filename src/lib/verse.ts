@@ -7,6 +7,7 @@ function createDailyBread(config: VerseConfig, dailyBreadConfig: DailyBreadConfi
   const bible = new DailyBread();
   const { version } = config;
   bible.setVersion(version);
+  bible.setFormatting({ preserveSmallCaps: true, showVerseNumberForVerseOne: true });
   bible.setBibleGatewayOptions({
     useHomepageToReadVerseOfTheDay: dailyBreadConfig.useHomepageForVerseOfTheDay,
   });

@@ -13,7 +13,7 @@
     (
       xs: 4rem,
       md: 5rem,
-      lg: 6rem,
+      lg: 6rem
     )
   );
 
@@ -46,7 +46,7 @@
         (
           xs: 1rem,
           md: 1.25rem,
-          lg: 1.5rem,
+          lg: 1.5rem
         )
       );
 
@@ -55,7 +55,7 @@
         (
           xs: 0px 1px 1px rgba(0, 0, 0, 0.5),
           md: 0px 2px 1px rgba(0, 0, 0, 0.5),
-          lg: 0px 3px 1px rgba(0, 0, 0, 0.5),
+          lg: 0px 3px 1px rgba(0, 0, 0, 0.5)
         )
       );
     }
@@ -68,12 +68,14 @@
     (
       xs: 2rem auto 2rem,
       md: 2.5rem auto 3rem,
-      lg: 3rem auto 4rem,
+      lg: 3rem auto 4rem
     )
   );
 
   .reference {
     margin: 0;
+    display: flex;
+    justify-content: center;
 
     a {
       display: inline-block;
@@ -91,9 +93,65 @@
         (
           xs: 0.625rem,
           md: 0.75rem,
-          lg: 1rem,
+          lg: 1rem
         )
       );
     }
+  }
+
+  &:hover {
+    .full-chapter {
+      opacity: 0.75;
+    }
+  }
+
+  .full-chapter {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+
+    color: inherit;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+
+    opacity: 0;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+    }
+
+    @include theme.set-property-for-screen-size(
+      margin,
+      (
+        xs: 0.25rem auto 0.25rem,
+        md: 0.3125rem auto 0.3125rem,
+        lg: 0.375rem auto 0.375rem
+      )
+    );
+
+    @include theme.set-property-for-screen-size(
+      font-size,
+      (
+        xs: 0.5rem,
+        md: 0.625rem,
+        lg: 0.75rem
+      )
+    );
+
+    @include theme.set-property-for-screen-size(
+      text-shadow,
+      (
+        xs: 0px 1px 1px rgba(0, 0, 0, 0.5),
+        md: 0px 2px 1px rgba(0, 0, 0, 0.5),
+        lg: 0px 3px 1px rgba(0, 0, 0, 0.5)
+      )
+    );
   }
 }
