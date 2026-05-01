@@ -15,6 +15,7 @@ interface VerseDisplayState {
   fullChapter: boolean;
   chapter?: BibleVerse;
   error?: AppError;
+  fetching: boolean;
 }
 
 type VerseHooks = ReactHooks<VerseDisplayState, 'setState'>;
@@ -58,7 +59,7 @@ function fetchFullChapter(
     });
 }
 
-const initialState: VerseDisplayState = { fullChapter: false, chapter: undefined, error: undefined };
+const initialState: VerseDisplayState = { fullChapter: false, chapter: undefined, error: undefined, fetching: false };
 
 function Verse() {
   const [state, setState] = useState<VerseDisplayState>(initialState);
@@ -72,11 +73,13 @@ function Verse() {
   useEffect(() => {
     // Need new Verse of the Day.
     if ((!config.search && lastFetchedAt !== startOfDay()) || status !== 'fulfilled' || error) {
-      if (status === 'loading') {
+      if (state.fetching) {
         return;
       }
-      dispatch(fetchVerse());
-      setState(initialState);
+      dispatch(fetchVerse()).then(() => {
+        setState({ ...state, fetching: false });
+      });
+      setState({ ...initialState, fetching: true });
       return;
     }
 
